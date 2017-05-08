@@ -12,9 +12,9 @@
 
 class scanner {
 private:
-    //const std::vector<const token> tokens;
+    const std::vector<token> tokens;
 public:
-    const std::vector<const token> & scan(std::string input);
+    const std::vector<token> * scan(std::string input);
 };
 
 #endif //TODO_SCANNER_H
