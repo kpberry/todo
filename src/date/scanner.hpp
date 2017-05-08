@@ -12,7 +12,7 @@
 
 class scanner {
 private:
-    const std::vector<const token> tokens;
+    //const std::vector<const token> tokens;
 public:
     const std::vector<const token> & scan(std::string input);
 };

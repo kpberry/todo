@@ -8,7 +8,7 @@
 #include "token.hpp"
 
 using namespace std;
-
+/*
 const std::vector<token>& scanner::scan(std::string input) {
     unsigned int start_index = 0;
     unsigned int end_index = 0;
@@ -32,4 +32,4 @@ const std::vector<token>& scanner::scan(std::string input) {
     return std::vector<token>();
 }
 
-
+*/

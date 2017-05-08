@@ -1,10 +1,14 @@
 #include <iostream>
 #include <fstream>
-#include <io.h>
 #include <iomanip>
 #include "../include/json.hpp"
 #include "project.hpp"
 #include "main.hpp"
+#if defined(WIN_32)
+    #include <io.h>
+#else
+    #include <sys/stat.h>
+#endif
 
 using namespace std;
 using json = nlohmann::json;
@@ -14,7 +18,7 @@ using namespace project_ns;
 #if defined(_WIN32)
     string home = "C:/Users/Kevin/.todo/";
 #else
-    string home = "~/.todo/"
+    string home = string(getenv("HOME")) + "/.todo/";
 #endif
 
 json config;
@@ -26,8 +30,8 @@ int main(int argc, char** argv) {
     projects_loc = config["projects"];
     home = config["home"];
 
-    mkdir(home.c_str());
-    mkdir(projects_loc.c_str());
+    mkdir_safe(home.c_str());
+    mkdir_safe(projects_loc.c_str());
 
     string project = "misc";
     string message = "";
@@ -82,6 +86,7 @@ json read_config() {
     if (config.good()) {
         config >> result;
     } else {
+        cout << "No configuration file found. Generating initial config.\n";
         result = init_config();
     }
     return result;
@@ -89,6 +94,7 @@ json read_config() {
 
 json init_config() {
     ofstream config(home + "config.json");
+    cout << "Generating config file at: " << home + "config.json\n";
     json result = default_config_json();
     config << setw(4) << result << endl;
     return result;
@@ -104,13 +110,13 @@ json default_config_json() {
     return config;
 }
 
-void mkdir(string dir) {
+int mkdir_safe(string dir) {
     int error = 0;
 
 #if defined(_WIN32)
-    error = _mkdir(home.c_str());
+    error = _mkdir(dir.c_str());
 #else
-    error = mkdir(home.cstr(), 0733);
+    error = mkdir(dir.c_str(), 0733);
 #endif
 
     if (error != 0 && error != -1) {
