@@ -1,3 +1,0 @@
-"C:\Program Files (x86)\JetBrains\CLion 2016.3.5\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\todo.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\todo.dir/objects.a @CMakeFiles\todo.dir\objects1.rsp
-C:\MinGW\bin\g++.exe  -g   -Wl,--whole-archive CMakeFiles\todo.dir/objects.a -Wl,--no-whole-archive  -o todo.exe -Wl,--out-implib,libtodo.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\todo.dir\linklibs.rsp

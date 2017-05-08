@@ -3,5 +3,5 @@ project(todo)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES task.cpp main.cpp project.cpp project.hpp main.hpp date/scanner.cpp date/scanner.hpp date/token.cpp date/token.hpp)
+set(SOURCE_FILES src/task.cpp src/main.cpp src/project.cpp src/project.hpp src/main.hpp src/date/scanner.cpp src/date/scanner.hpp src/date/token.cpp src/date/token.hpp)
 add_executable(todo ${SOURCE_FILES})
