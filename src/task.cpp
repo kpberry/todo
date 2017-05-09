@@ -3,8 +3,8 @@
 //
 
 #include <iostream>
-#include <time.h>
 #include "task.hpp"
+#include "text/string_formatter.h"
 
 using namespace std;
 using namespace task_ns;
@@ -88,6 +88,32 @@ string task::to_string() const {
 
     string status_strings[] = {"unstarted", "started", "complete"};
     string result = name + " | status: " + status_strings[status]
+                    + " | created: " + created_date + " | modified: "
+                    + modified_date;
+    return result;
+}
+
+string task::to_fancy_string() const {
+    return to_fancy_string(name.length());
+}
+
+string task::to_fancy_string(unsigned long first_length) const {
+    struct tm* created_time = localtime(&created);
+    char created_date[20];
+    strftime(created_date, sizeof(created_date), "%m-%d-%Y", created_time);
+
+    struct tm* modified_time = localtime(&created);
+    char modified_date[20];
+    strftime(modified_date, sizeof(modified_date), "%m-%d-%Y", modified_time);
+
+    string status_strings[] = {
+            rgb_string("unstarted", 200, 0, 0),
+            rgb_string("started  ", 200, 200, 0),
+            rgb_string("complete ", 0, 200, 0)
+    };
+
+    string result = rgb_string(name, 100, 200, 150) + std::string(first_length - name.length(), ' ')
+                    + " | status: " + status_strings[status]
                     + " | created: " + created_date + " | modified: "
                     + modified_date;
     return result;

@@ -4,6 +4,7 @@
 #include "../include/json.hpp"
 #include "project.hpp"
 #include "main.hpp"
+
 #if defined(WIN_32)
     #include <io.h>
 #else
@@ -46,7 +47,7 @@ int main(int argc, char** argv) {
     }
 
     write_task(project, task(message));
-    cout << read_project(project).to_string();
+    cout << read_project(project).to_fancy_string();
 
     return 0;
 }
@@ -73,7 +74,12 @@ project read_project(string project_string) {
         input >> j;
 
         //convert the json project to a c++ object
-        from_json(j, p);
+        //TODO fix this (doesn't work for some reason)
+        try {
+            from_json(j, p);
+        } catch (exception& e) {
+            p = project(project_string);
+        }
     } else {
         p = project(project_string);
     }

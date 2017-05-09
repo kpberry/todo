@@ -30,11 +30,17 @@ namespace task_ns {
         bool operator==(const task t);
         std::string to_string() const;
         void set_status(STATUS status);
+
+        std::string to_fancy_string() const;
+
+        std::string to_fancy_string(unsigned long first_length) const;
+
     private:
         STATUS status;
         std::string name;
         time_t modified;
         time_t created;
+
     };
 
     void to_json(json &j, const task &t);

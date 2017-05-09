@@ -3,6 +3,7 @@
 //
 
 #include "project.hpp"
+#include "text/string_formatter.h"
 
 using namespace std;
 using namespace project_ns;
@@ -45,6 +46,21 @@ string project::to_string() {
     string result = name + "\n";
     for (const task t : tasks) {
         result += "\t" + t.to_string() + "\n";
+    }
+    return result;
+}
+
+string project::to_fancy_string() {
+    string result = rgb_string(name + "\n", 100, 160, 255);
+    uint64_t length = 0;
+    for (const task t : tasks) {
+        if (t.getName().length() > length) {
+            length = t.getName().length();
+        }
+    }
+    int count = 0;
+    for (const task t : tasks) {
+        result += "\t" + std::to_string(++count) + ": " + t.to_fancy_string(length) + "\n";
     }
     return result;
 }

@@ -29,6 +29,8 @@ namespace project_ns {
         const std::list<task_ns::task> &getTasks() const;
         void set_tasks(std::list<task_ns::task> tasks);
         void set_name(std::string name);
+
+        std::string to_fancy_string();
     };
 
     void to_json(json &j, const project &p);
