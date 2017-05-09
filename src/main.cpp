@@ -5,7 +5,7 @@
 #include "project.hpp"
 #include "main.hpp"
 
-#if defined(WIN_32)
+#if defined(_WIN32)
     #include <io.h>
 #else
     #include <sys/stat.h>
@@ -47,7 +47,11 @@ int main(int argc, char** argv) {
     }
 
     write_task(project, task(message));
+#if defined(_WIN32)
+    cout << read_project(project).to_string();
+#else
     cout << read_project(project).to_fancy_string();
+#endif
 
     return 0;
 }
