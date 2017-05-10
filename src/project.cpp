@@ -23,7 +23,7 @@ namespace project_ns {
     void from_json(const json& j, project& p) {
         p.set_name(j.at("name").get<std::string>());
         p.set_color(j.at("color").get<color_t>());
-        p.set_tasks(j.at("tasks").get<list<task>>());
+        p.set_tasks(j.at("tasks").get<vector<task>>());
     }
 }
 
@@ -31,12 +31,12 @@ void project::add(task t) {
     this->tasks.push_back(t);
 }
 
-void project::remove(task t) {
-    this->tasks.remove(t);
+void project::remove(int task_number) {
+    this->tasks.erase(this->tasks.begin() + task_number);
 }
 
 void project::remove(const bool (*predicate)(task)) {
-    this->tasks.remove_if(predicate);
+    tasks.erase(remove_if(tasks.begin(), tasks.end(), predicate), tasks.end());
 }
 
 void project::remove_complete() {
@@ -55,11 +55,11 @@ const string &project::get_name() const {
     return name;
 }
 
-const list<task> &project::get_tasks() const {
+const vector<task> &project::get_tasks() const {
     return tasks;
 }
 
-void project::set_tasks(std::list<task_ns::task> tasks) {
+void project::set_tasks(vector<task_ns::task> tasks) {
     this->tasks = tasks;
 }
 
@@ -100,11 +100,17 @@ uint64_t project::get_longest_task_length() {
 
 string project::to_string() {
     stringstream result;
-    result << name << '\n';
+    result << name << ":\n";
+
     int count = 0;
     for (const task t : tasks) {
         result << '\t' << ++count << ": " << t.to_string() << '\n';
     }
+
+    if (count == 0) {
+        result << "\tThere are currently no tasks in this project.";
+    }
+
     return result.str();
 }
 
@@ -112,13 +118,41 @@ string project::to_string() {
  * @return a colored string representing this project
  */
 string project::to_fancy_string() {
+#if defined(_WIN32)
+    return this->to_string();
+#else
     stringstream result;
-    result << rgb_string(name, color) << '\n';
+    result << rgb_string(name, color) << ":\n";
     uint64_t length = get_longest_task_length();
     int count = 0;
     for (const task t : tasks) {
         result << '\t' << ++count << ": " << t.to_fancy_string(length) << '\n';
-        cout << result.str() << '\n' << '\n';
     }
+
+    if (count == 0) {
+        result << "\tThere are currently no tasks in this project.";
+    }
+
     return result.str();
+#endif
+}
+
+void project::remove_started() {
+    this->remove([](task t) -> const bool { return t.is_started(); });
+}
+
+void project::remove_unstarted() {
+    this->remove([](task t) -> const bool { return t.is_unstarted(); });
+}
+
+void project::advance_task(int task_number) {
+    tasks[task_number].advance();
+}
+
+void project::undo_task(int task_number) {
+    tasks[task_number].undo();
+}
+
+void project::set_status(int task_number, task_ns::task::STATUS status) {
+    tasks[task_number].set_status(status);
 }

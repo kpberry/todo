@@ -79,6 +79,14 @@ void task::undo() {
     time(&modified);
 }
 
+void task::advance() {
+    if (status == unstarted) {
+        start();
+    } else if (status == started) {
+        complete();
+    }
+}
+
 void task::set_created(time_t created) {
     this->created = created;
 }

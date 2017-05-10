@@ -39,6 +39,7 @@ namespace task_ns {
         void complete();
         void start();
         void undo();
+        void advance();
 
         //string
         std::string to_string() const;

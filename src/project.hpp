@@ -16,7 +16,7 @@ namespace project_ns {
     class project {
     private:
         std::string name;
-        std::list<task_ns::task> tasks;
+        std::vector<task_ns::task> tasks;
         color_ns::color_t color;
     public:
         //constructors
@@ -26,20 +26,26 @@ namespace project_ns {
 
         //getters
         const std::string &get_name() const;
-        const std::list<task_ns::task> &get_tasks() const;
+        const std::vector<task_ns::task> &get_tasks() const;
         const color_ns::color_t &get_color() const;
 
         //setters
-        void set_tasks(std::list<task_ns::task> tasks);
+        void set_tasks(std::vector<task_ns::task> tasks);
         void set_name(std::string name);
         void set_color(color_ns::color_t color);
 
         //mutators
+        void advance_task(int i);
+        void undo_task(int task_number);
+        void set_status(int task_number, task_ns::task::STATUS status);
+
         void add(task_ns::task t);
 
-        void remove(task_ns::task t);
+        void remove(int task_number);
         void remove(const bool (* predicate)(task_ns::task));
         void remove_complete();
+        void remove_started();
+        void remove_unstarted();
         void remove_incomplete();
 
         //strings
