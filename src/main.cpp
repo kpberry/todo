@@ -17,7 +17,9 @@ using namespace task_ns;
 using namespace project_ns;
 
 #if defined(_WIN32)
-    string home = "C:/Users/Kevin/.todo/";
+    string home = string(getenv("SystemDrive"))
+                  + string(getenv("HOMEPATH"))
+                  + "/.todo/";
 #else
     string home = string(getenv("HOME")) + "/.todo/";
 #endif
