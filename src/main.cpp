@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iomanip>
 #include "../include/json.hpp"
-#include "project.hpp"
 #include "main.hpp"
 
 #if defined(WIN_32)
@@ -53,7 +52,7 @@ int main(int argc, char** argv) {
 }
 
 void write_project(project p) {
-    ofstream output(projects_loc + "/" + p.getName() + ".json");
+    ofstream output(projects_loc + "/" + p.get_name() + ".json");
     output << json(p);
 }
 
@@ -128,6 +127,8 @@ int mkdir_safe(string dir) {
     if (error != 0 && error != -1) {
         cout << "Error: " << error << "\n";
     }
+
+    return error;
 }
 
 void print_file(string filename) {

@@ -4,11 +4,12 @@
 
 #include <iostream>
 #include "task.hpp"
-#include "text/string_formatter.h"
+#include "text/string_formatter.hpp"
 
 using namespace std;
 using namespace task_ns;
 using nlohmann::json;
+using namespace color_ns;
 
 namespace task_ns {
     void to_json(json &j, const task& t) {
@@ -26,6 +27,11 @@ namespace task_ns {
         t.set_created(j.at("created").get<time_t>());
         t.set_modified(j.at("modified").get<time_t>());
     }
+
+    static constexpr color_ns::color_t unstarted_color = {200, 0, 0};
+    static constexpr color_ns::color_t started_color = {200, 200, 0};
+    static constexpr color_ns::color_t completed_color = {0, 200, 0};
+    static constexpr color_ns::color_t title_color = {100, 200, 150};
 }
 
 task::task() {
@@ -107,12 +113,13 @@ string task::to_fancy_string(unsigned long first_length) const {
     strftime(modified_date, sizeof(modified_date), "%m-%d-%Y", modified_time);
 
     string status_strings[] = {
-            rgb_string("unstarted", 200, 0, 0),
-            rgb_string("started  ", 200, 200, 0),
-            rgb_string("complete ", 0, 200, 0)
+            rgb_string("unstarted", unstarted_color),
+            rgb_string("started  ", started_color),
+            rgb_string("complete ", completed_color)
     };
 
-    string result = rgb_string(name, 100, 200, 150) + std::string(first_length - name.length(), ' ')
+    string result = rgb_string(name, title_color)
+                    + std::string(first_length - name.length(), ' ')
                     + " | status: " + status_strings[status]
                     + " | created: " + created_date + " | modified: "
                     + modified_date;
@@ -123,7 +130,7 @@ task::~task() {
 
 }
 
-bool task::is_complete()const {
+bool task::is_complete() const {
     return status == completed;
 }
 
