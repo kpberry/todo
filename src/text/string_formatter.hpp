@@ -9,6 +9,6 @@
 #include "color.h"
 
 std::string color_string(const std::string s, fg::color color);
-inline const std::string rgb_string(const std::string& s, const color_ns::color_t& c);
+const std::string rgb_string(const std::string& s, const color_ns::color_t& c);
 
 #endif

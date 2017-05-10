@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void write_project(project p) {
+void write_project(const project& p) {
     ofstream output(projects_loc + "/" + p.get_name() + ".json");
     output << json(p);
 }

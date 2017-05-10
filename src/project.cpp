@@ -2,6 +2,7 @@
 // Created by Kevin on 5/6/2017.
 //
 
+#include <sstream>
 #include "project.hpp"
 #include "text/string_formatter.hpp"
 
@@ -46,29 +47,6 @@ void project::remove_incomplete() {
     this->remove([](task t) -> const bool { return !t.is_complete(); });
 }
 
-string project::to_string() {
-    string result = name + "\n";
-    for (const task t : tasks) {
-        result += "\t" + t.to_string() + "\n";
-    }
-    return result;
-}
-
-string project::to_fancy_string() {
-    string result = rgb_string(name + "\n", color);
-    uint64_t length = 0;
-    for (const task t : tasks) {
-        if (t.getName().length() > length) {
-            length = t.getName().length();
-        }
-    }
-    int count = 0;
-    for (const task t : tasks) {
-        result += "\t" + std::to_string(++count) + ": " + t.to_fancy_string(length) + "\n";
-    }
-    return result;
-}
-
 void project::set_name(string name) {
     this->name = name;
 }
@@ -106,4 +84,41 @@ void project::set_color(color_t color) {
 
 const color_t &project::get_color() const {
     return this->color;
+}
+
+uint64_t project::get_longest_task_length() {
+    uint64_t result = 0;
+    for (const task t : tasks) {
+        uint64_t length = t.get_name().length();
+        if (length > result) {
+            result = length;
+        }
+    }
+
+    return result;
+}
+
+string project::to_string() {
+    stringstream result;
+    result << name << '\n';
+    int count = 0;
+    for (const task t : tasks) {
+        result << '\t' << ++count << ": " << t.to_string() << '\n';
+    }
+    return result.str();
+}
+
+/**
+ * @return a colored string representing this project
+ */
+string project::to_fancy_string() {
+    stringstream result;
+    result << rgb_string(name, color) << '\n';
+    uint64_t length = get_longest_task_length();
+    int count = 0;
+    for (const task t : tasks) {
+        result << '\t' << ++count << ": " << t.to_fancy_string(length) << '\n';
+        cout << result.str() << '\n' << '\n';
+    }
+    return result.str();
 }

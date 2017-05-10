@@ -14,10 +14,10 @@ using namespace color_ns;
 namespace task_ns {
     void to_json(json &j, const task& t) {
         j = json{
-                {"name",     t.getName()},
-                {"status",   t.getStatus()},
-                {"modified", t.getModified()},
-                {"created",  t.getCreated()}
+                {"name", t.get_name()},
+                {"status", t.get_status()},
+                {"modified", t.get_modified()},
+                {"created", t.get_created()}
         };
     }
 
@@ -32,6 +32,15 @@ namespace task_ns {
     static constexpr color_ns::color_t started_color = {200, 200, 0};
     static constexpr color_ns::color_t completed_color = {0, 200, 0};
     static constexpr color_ns::color_t title_color = {100, 200, 150};
+
+    static string status_strings[] = {
+            "unstarted", "started", "complete"
+    };
+    static string color_status_strings[] = {
+            rgb_string("unstarted", unstarted_color),
+            rgb_string("started  ", started_color),
+            rgb_string("complete ", completed_color)
+    };
 }
 
 task::task() {
@@ -50,11 +59,13 @@ task::task(string name) {
 
 void task::complete() {
     this->status = completed;
+    //sets the modified time
     time(&modified);
 }
 
 void task::start() {
     this->status = started;
+    //sets the modified time
     time(&modified);
 }
 
@@ -64,6 +75,7 @@ void task::undo() {
     } else if (status == started) {
         status = unstarted;
     }
+    //sets the modified time
     time(&modified);
 }
 
@@ -83,19 +95,18 @@ void task::set_status(task::STATUS status) {
     this->status = status;
 };
 
+string time_to_string(time_t time) {
+    struct tm* local_time = localtime(&time);
+    char time_string[20];
+    strftime(time_string, sizeof(time_string), "%m-%d-%Y", local_time);
+    return string(time_string);
+}
+
 string task::to_string() const {
-    struct tm* created_time = localtime(&created);
-    char created_date[20];
-    strftime(created_date, sizeof(created_date), "%m-%d-%Y", created_time);
-
-    struct tm* modified_time = localtime(&created);
-    char modified_date[20];
-    strftime(modified_date, sizeof(modified_date), "%m-%d-%Y", modified_time);
-
-    string status_strings[] = {"unstarted", "started", "complete"};
-    string result = name + " | status: " + status_strings[status]
-                    + " | created: " + created_date + " | modified: "
-                    + modified_date;
+    string result = name
+                    + " | status: " + status_strings[status]
+                    + " | created: " + time_to_string(created)
+                    + " | modified: " + time_to_string(modified);
     return result;
 }
 
@@ -104,41 +115,23 @@ string task::to_fancy_string() const {
 }
 
 string task::to_fancy_string(unsigned long first_length) const {
-    struct tm* created_time = localtime(&created);
-    char created_date[20];
-    strftime(created_date, sizeof(created_date), "%m-%d-%Y", created_time);
-
-    struct tm* modified_time = localtime(&created);
-    char modified_date[20];
-    strftime(modified_date, sizeof(modified_date), "%m-%d-%Y", modified_time);
-
-    string status_strings[] = {
-            rgb_string("unstarted", unstarted_color),
-            rgb_string("started  ", started_color),
-            rgb_string("complete ", completed_color)
-    };
-
-    string result = rgb_string(name, title_color)
-                    + std::string(first_length - name.length(), ' ')
-                    + " | status: " + status_strings[status]
-                    + " | created: " + created_date + " | modified: "
-                    + modified_date;
+    string spacing = std::string(first_length - name.length(), ' ');
+    string result = rgb_string(name, title_color) + spacing
+                      + " | status: " + color_status_strings[status]
+                      + " | created: " + time_to_string(created)
+                      + " | modified: " + time_to_string(modified);
     return result;
-}
-
-task::~task() {
-
 }
 
 bool task::is_complete() const {
     return status == completed;
 }
 
-bool task::is_started() {
+bool task::is_started() const {
     return status == started;
 }
 
-bool task::is_unstarted() {
+bool task::is_unstarted() const {
     return status == unstarted;
 }
 
@@ -146,18 +139,18 @@ bool task::operator==(const task t) {
     return this->name == t.name;
 }
 
-task::STATUS task::getStatus() const {
+const task::STATUS task::get_status() const {
     return status;
 }
 
-const string &task::getName() const {
+const string &task::get_name() const {
     return name;
 }
 
-time_t task::getModified() const {
+const time_t task::get_modified() const {
     return modified;
 }
 
-time_t task::getCreated() const {
+const time_t task::get_created() const {
     return created;
 }

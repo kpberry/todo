@@ -45,6 +45,7 @@ namespace project_ns {
         //strings
         std::string to_string();
         std::string to_fancy_string();
+        uint64_t get_longest_task_length();
     };
 
     //json conversion for projects

@@ -8,11 +8,16 @@
 
 using json = nlohmann::json;
 
+//config IO
+json init_config();
+json read_config();
+json default_config_json();
+
+//task and project IO
+project_ns::project read_project(std::string project);
+void write_project(const project_ns::project& p);
+void write_task(std::string project, task_ns::task t);
+
+//general file IO
 void print_file(std::string filename);
-json init_config() ;
-json read_config() ;
-json default_config_json() ;
-void write_task(std::string project, task_ns::task t) ;
-task_ns::task read_tasks(std::string project) ;
-project_ns::project read_project(std::string project) ;
 int mkdir_safe(std::string dir);

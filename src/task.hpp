@@ -11,30 +11,42 @@ using json = nlohmann::json;
 namespace task_ns {
     class task {
     public:
-        task();
-        ~task();
-        task(std::string name);
-        void complete();
-        void start();
-        void undo();
-        void set_name(std::string name);
-        void set_created(time_t);
-        void set_modified(time_t);
         enum STATUS {
             unstarted, started, completed
         };
-        STATUS getStatus() const;
-        const std::string &getName() const;
-        time_t getModified() const;
-        time_t getCreated() const;
+
+        //constructors
+        task();
+        task(std::string name);
+
+        //getters
+        const STATUS get_status() const;
+        const std::string &get_name() const;
+        const time_t get_modified() const;
+        const time_t get_created() const;
+
         bool is_complete() const;
-        bool is_started();
-        bool is_unstarted();
-        bool operator==(const task t);
-        std::string to_string() const;
+        bool is_started() const;
+        bool is_unstarted() const;
+
+        //setters
         void set_status(STATUS status);
+        void set_name(std::string name);
+        void set_created(time_t time);
+        void set_modified(time_t time);
+
+        //mutators
+        void complete();
+        void start();
+        void undo();
+
+        //string
+        std::string to_string() const;
         std::string to_fancy_string() const;
         std::string to_fancy_string(unsigned long first_length) const;
+
+        //operators
+        bool operator==(const task t);
     private:
         STATUS status;
         std::string name;
@@ -42,6 +54,7 @@ namespace task_ns {
         time_t created;
     };
 
+    //json conversion for tasks
     void to_json(json &j, const task &t);
     void from_json(const json &j, task &t);
 }
