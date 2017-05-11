@@ -18,7 +18,14 @@ nlohmann::json default_config_json();
 //task and project IO
 project_ns::project read_project(std::string project);
 void write_project(const project_ns::project &p);
-void write_task(std::string project, task_ns::task t);
+
+enum sort_type {
+    alphabetical, priority, created, modified, none
+};
+
+enum sort_direction {
+    forward, reversed
+};
 
 //general file IO
 void print_file(std::string filename);

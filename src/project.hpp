@@ -45,10 +45,21 @@ namespace project_ns {
         void remove_unstarted();
         void remove_incomplete();
 
+        void reverse_tasks();
+
         //strings
         std::string to_string();
         std::string to_fancy_string();
         uint64_t get_longest_task_length();
+
+        //sorts
+        void sort_tasks_alphabetically();
+        void sort_tasks_by_priority();
+        void sort_tasks(bool (*comparator)(
+                const task_ns::task &, const task_ns::task &
+        ));
+        void sort_tasks_by_modified();
+        void sort_tasks_by_created();
     };
 
     //json conversion for projects

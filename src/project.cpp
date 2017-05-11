@@ -153,3 +153,35 @@ void project::undo_task(int task_number) {
 void project::set_status(int task_number, task_ns::task::STATUS status) {
     tasks[task_number].set_status(status);
 }
+
+void project::sort_tasks(bool (*comparator) (const task&, const task&)) {
+    sort(tasks.begin(), tasks.end(), comparator);
+}
+
+void project::sort_tasks_alphabetically() {
+    sort_tasks([](const task& a, const task& b) -> bool {
+        return a.get_name() < b.get_name();
+    });
+}
+
+void project::sort_tasks_by_priority() {
+    sort_tasks([](const task& a, const task& b) -> bool {
+        return a.get_status() < b.get_status();
+    });
+}
+
+void project::sort_tasks_by_created() {
+    sort_tasks([](const task& a, const task& b) -> bool {
+        return a.get_created() < b.get_created();
+    });
+}
+
+void project::sort_tasks_by_modified() {
+    sort_tasks([](const task& a, const task& b) -> bool {
+        return a.get_modified() < b.get_modified();
+    });
+}
+
+void project::reverse_tasks() {
+    reverse(tasks.begin(), tasks.end());
+}

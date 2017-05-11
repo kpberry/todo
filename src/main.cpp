@@ -58,7 +58,6 @@ int main(int argc, char** argv) {
     if (flag_indices[DELETE] > 0) {
         if (flag_indices[TASK_NUMBER] > 0) {
             project.remove(stoi(argv[flag_indices[TASK_NUMBER]]));
-            write_project(project);
         } else {
             //project_loc = regex_replace(project_loc, regex(" "), "\\ ");
             if (remove(project_loc.c_str())) {
@@ -86,24 +85,21 @@ int main(int argc, char** argv) {
                 project.remove_complete();
                 break;
         }
-
-        write_project(project);
     } else if (flag_indices[MESSAGE] > 0) {
-        write_task(project_str, task(argv[flag_indices[MESSAGE]]));
+        project = read_project(project_str);
+        project.add(task(argv[flag_indices[MESSAGE]]));
     } else if (flag_indices[NEXT] > 0) {
         int task_number = get_task_number(
                 argv, argc, flag_indices, project_str, NEXT, "advance"
         );
 
         project.advance_task(task_number);
-        write_project(project);
     } else if (flag_indices[UNDO] > 0) {
         int task_number = get_task_number(
                 argv, argc, flag_indices, project_str, UNDO, "undo"
         );
 
         project.undo_task(task_number);
-        write_project(project);
     } else if (flag_indices[SET] > 0) {
         int task_number = get_task_number(
                 argv, argc, flag_indices, project_str, SET, "set"
@@ -113,8 +109,25 @@ int main(int argc, char** argv) {
         );
 
         project.set_status(task_number, status);
-        write_project(project);
     }
+
+    switch ((sort_type) config["sort"]) {
+        case priority: project.sort_tasks_by_priority();
+            break;
+        case alphabetical: project.sort_tasks_alphabetically();
+            break;
+        case modified: project.sort_tasks_by_modified();
+            break;
+        case created: project.sort_tasks_by_created();
+            break;
+        case none:
+            break;
+    }
+    if (config["sort_order"] == reversed) {
+        project.reverse_tasks();
+    }
+
+    write_project(project);
 
     cout << read_project(project_str).to_fancy_string() << '\n';
 
@@ -179,7 +192,7 @@ int get_task_number(char **argv, int argc, int *flag_indices,
         task_number = request_task_number(project_str, action);
     }
 
-    return task_number;
+    return task_number - 1;
 }
 
 int request_task_number(string project_str, string action) {
@@ -197,7 +210,7 @@ int request_task_number(string project_str, string action) {
         }
     }
 
-    return task_number - 1;
+    return task_number;
 }
 
 task_ns::task::STATUS get_status_type(char** argv, int argc, int* flag_indices,
@@ -242,12 +255,6 @@ task_ns::task::STATUS get_status_type(char** argv, int argc, int* flag_indices,
 void write_project(const project& p) {
     ofstream output(projects_loc + p.get_name() + ".json");
     output << json(p);
-}
-
-void write_task(string project_string, const task t) {
-    project p = read_project(project_string);
-    p.add(t);
-    write_project(p);
 }
 
 project read_project(string project_string) {
@@ -297,7 +304,9 @@ json default_config_json() {
     json config = {
             {"home", home},
             {"projects", home + "projects/"},
-            {"misc", home + "misc/"}
+            {"misc", home + "misc/"},
+            {"sort", priority},
+            {"sort_direction", reversed}
     };
 
     return config;
