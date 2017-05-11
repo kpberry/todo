@@ -5,12 +5,9 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include <list>
 #include "task.hpp"
 #include "../include/json.hpp"
-#include "text/color.h"
-
-using json = nlohmann::json;
+#include "text/color.hpp"
 
 namespace project_ns {
     class project {
@@ -55,8 +52,8 @@ namespace project_ns {
     };
 
     //json conversion for projects
-    void to_json(json &j, const project &p);
-    void from_json(const json &j, project &p);
+    void to_json(nlohmann::json &j, const project &p);
+    void from_json(const nlohmann::json &j, project &p);
 }
 
 #endif

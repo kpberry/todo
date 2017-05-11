@@ -204,7 +204,6 @@ task_ns::task::STATUS get_status_type(char** argv, int argc, int* flag_indices,
                                       flag expected) {
     char status_char;
     if (flag_indices[expected] < argc && flag_indices[expected] >= 0) {
-        cout << expected << '\n';
         status_char = argv[flag_indices[expected]][0];
     } else {
         status_char = '0';

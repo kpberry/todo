@@ -10,6 +10,7 @@ using namespace std;
 using namespace project_ns;
 using namespace task_ns;
 using namespace color_ns;
+using json = nlohmann::json;
 
 namespace project_ns {
     void to_json(json& j, const project& p) {
@@ -118,9 +119,6 @@ string project::to_string() {
  * @return a colored string representing this project
  */
 string project::to_fancy_string() {
-#if defined(_WIN32)
-    return this->to_string();
-#else
     stringstream result;
     result << rgb_string(name, color) << ":\n";
     uint64_t length = get_longest_task_length();
@@ -134,7 +132,6 @@ string project::to_fancy_string() {
     }
 
     return result.str();
-#endif
 }
 
 void project::remove_started() {

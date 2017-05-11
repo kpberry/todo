@@ -2,11 +2,8 @@
 #define TASK_H
 
 #include "../include/json.hpp"
-#include "text/color.h"
+#include "text/color.hpp"
 #include <string>
-
-using json = nlohmann::json;
-
 
 namespace task_ns {
     class task {
@@ -56,8 +53,8 @@ namespace task_ns {
     };
 
     //json conversion for tasks
-    void to_json(json &j, const task &t);
-    void from_json(const json &j, task &t);
+    void to_json(nlohmann::json &j, const task &t);
+    void from_json(const nlohmann::json &j, task &t);
 }
 
 #endif

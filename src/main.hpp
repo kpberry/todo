@@ -2,16 +2,18 @@
 // Created by Kevin on 5/6/2017.
 //
 
-#pragma once
+#ifndef MAIN_H
+#define MAIN_H
 
 #include "project.hpp"
+#include "../include/json.hpp"
+#include "task.hpp"
 
-using json = nlohmann::json;
 
 //config IO
-json init_config();
-json read_config();
-json default_config_json();
+nlohmann::json init_config();
+nlohmann::json read_config();
+nlohmann::json default_config_json();
 
 //task and project IO
 project_ns::project read_project(std::string project);
@@ -34,3 +36,4 @@ int get_task_number(char **argv, int argc, int *flag_indices,
                     std::string project_str, flag expected, std::string action);
 task_ns::task::STATUS get_status_type(char **argv, int argc, int *flag_indices,
                                       flag expected);
+#endif

@@ -7,29 +7,17 @@
 
 #include "../../include/json.hpp"
 
-using json=nlohmann::json;
-
 namespace color_ns {
     typedef struct color_t {
         int r, g, b;
     } color_t;
 
-    //function is static to avoid linker errors
-    static void to_json(json &j, const color_t &c) {
-        j = json{
-                {"r", c.r},
-                {"g", c.g},
-                {"b", c.b}
-        };
-    }
-
-    static void from_json(const json &j, color_t &c) {
-        c.r = j.at("r").get<int>();
-        c.g = j.at("g").get<int>();
-        c.b = j.at("b").get<int>();
-    }
+    void to_json(nlohmann::json &j, const color_t &c);
+    void from_json(const nlohmann::json &j, color_t &c);
+    int sqr_dist(color_t a, color_t b);
+    extern color_ns::color_t windows_colors[8];
+    int closest_windows_color_index(color_t c);
 }
-
 
 namespace fg {
     enum color {
