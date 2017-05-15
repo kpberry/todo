@@ -54,7 +54,7 @@ namespace project_ns {
 
         //sorts
         void sort_tasks_alphabetically();
-        void sort_tasks_by_priority();
+        void sort_tasks_by_status();
         void sort_tasks(bool (*comparator)(
                 const task_ns::task &, const task_ns::task &
         ));

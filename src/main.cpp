@@ -29,12 +29,6 @@ using namespace project_ns;
 json config;
 string projects_loc;
 
-
-static constexpr color_ns::color_t unstarted_color = {200, 0, 0};
-static constexpr color_ns::color_t started_color = {200, 200, 0};
-static constexpr color_ns::color_t completed_color = {0, 200, 0};
-static constexpr color_ns::color_t title_color = {100, 200, 150};
-
 int main(int argc, char** argv) {
     //initialize the environment; not much sane can happen before this
     config = read_config();
@@ -112,7 +106,8 @@ int main(int argc, char** argv) {
     }
 
     switch ((sort_type) config["sort"]) {
-        case priority: project.sort_tasks_by_priority();
+        case priority:
+            project.sort_tasks_by_status();
             break;
         case alphabetical: project.sort_tasks_alphabetically();
             break;

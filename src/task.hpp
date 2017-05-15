@@ -55,6 +55,12 @@ namespace task_ns {
     //json conversion for tasks
     void to_json(nlohmann::json &j, const task &t);
     void from_json(const nlohmann::json &j, task &t);
+
+    //default colors for task items
+    static constexpr color_ns::color_t unstarted_color = {200, 0, 0};
+    static constexpr color_ns::color_t started_color = {200, 200, 0};
+    static constexpr color_ns::color_t completed_color = {0, 200, 0};
+    static constexpr color_ns::color_t title_color = {100, 200, 150};
 }
 
 #endif
