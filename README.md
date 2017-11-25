@@ -1,13 +1,16 @@
-Command line todo list manager.
+#Command line todo list manager.
 
-Building: 
+**Building: **
+```
     cmake .
     make
-
-Use:
+```
+**Use:**
+```
     ./todo -p <project name> <<other flags>>
-
-Flags: 
+```
+**Flags: **
+```
     -p <project name>      specifies a project on which an action should be performed
     -t <task number>       specifies a task number on which an action should be performed
     
@@ -19,8 +22,9 @@ Flags:
 
     -c <status code>       clears all tasks in a project with the specified status code
     -d <task or project>   deletes the specified task or project
-
-Examples:
+```
+**Examples:**
+```
     // Add a task to the Shopping project with the text "Remember to buy eggs"
     ./todo -p Shopping -m "Remember to buy eggs" 
     // Advance the first task in shopping to the "started" stage
@@ -31,3 +35,4 @@ Examples:
     ./todo -p Shopping -s c -t 2
     // Clear all completed tasks from the Shopping project
     ./todo -p Shopping -c c
+```
