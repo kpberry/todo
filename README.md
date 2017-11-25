@@ -1,6 +1,6 @@
 #Command line todo list manager.
 
-**Building: **
+**Building:**
 ```
     cmake .
     make
@@ -9,7 +9,7 @@
 ```
     ./todo -p <project name> <<other flags>>
 ```
-**Flags: **
+**Flags:**
 ```
     -p <project name>      specifies a project on which an action should be performed
     -t <task number>       specifies a task number on which an action should be performed
